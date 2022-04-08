@@ -8,6 +8,7 @@
     "lint-fix": "eslint . --ext .js --fix"
   },
   "dependencies": {
+    "bcrypt": "^5.0.1",
     "body-parser": "^1.20.0",
     "cookie-parser": "~1.4.4",
     "dayjs": "^1.11.0",

@@ -1,16 +1,53 @@
+const bcrypt = require('bcrypt');
+
 module.exports = (sequelize, DataTypes) => {
   const User = sequelize.define(
-    "User",
+    'User',
     {
-      email: DataTypes.STRING(255),
-      password: DataTypes.STRING(1000),
-      name: DataTypes.STRING,
+      email: {
+        type: DataTypes.STRING(255),
+        allowNull: false,
+        unique: true,
+      },
+      password: {
+        type: DataTypes.STRING(1000),
+        allowNull: false,
+      },
+      name: {
+        type: DataTypes.STRING,
+      },
     },
     {
       // options
       paranoid: true,
+
+      hooks: {
+        beforeCreate: async (instance, options) => {
+          instance.dataValues.password = await bcrypt.hash(
+            instance.dataValues.password,
+            10
+          );
+        },
+        beforeUpdate: async (instance, options) => {
+          instance.dataValues.password = await bcrypt.hash(
+            instance.dataValues.password,
+            10
+          );
+        },
+      },
     }
   );
   User.associate = function (models) {};
+
+  // classMethods
+  User.test = function () {
+    console.log('class methods: test()');
+  };
+
+  // instanceMethods
+  User.prototype.validatePassword = async function (plaintextPassword) {
+    const isSame = await bcrypt.compare(plaintextPassword, this.password);
+    return isSame;
+  };
   return User;
 };
