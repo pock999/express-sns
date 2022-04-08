@@ -6,9 +6,12 @@ module.exports = {
     dialect: "mariadb",
     name: "express-sns",
     username: "root",
-    password: "1qaz!QAZ",
+    password: "",
     dialectOptions: {
       charset: "utf8mb4",
+    },
+    sync: {
+      force: true,
     },
   },
 };
