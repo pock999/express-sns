@@ -1,11 +1,28 @@
-var express = require("express");
-var path = require("path");
-var cookieParser = require("cookie-parser");
-var logger = require("morgan");
+const express = require("express");
+const path = require("path");
+const cookieParser = require("cookie-parser");
+const DB = require("./api/models");
+const logger = require("morgan");
 
-var indexRouter = require("./api/routes/index");
+const config = require("./config/config");
+const indexRouter = require("./api/routes/index");
 
-var app = express();
+const app = express();
+
+DB.sequelize
+  .sync(config.database.sync)
+  .then(async () => {
+    console.log("=== sequelize.sync start ===");
+    await DB.User.create({
+      name: "王小明",
+      email: "ming123@google.com",
+      password: "abcd1234",
+    });
+    console.log("=== sequelize.sync end ===");
+  })
+  .catch((err) => {
+    console.log("error => ", err);
+  });
 
 app.use(logger("dev"));
 app.use(express.json());

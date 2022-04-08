@@ -16,7 +16,10 @@
     "espree": "^9.3.1",
     "express": "~4.16.1",
     "lodash": "^4.17.21",
-    "morgan": "~1.9.1"
+    "mariadb": "^3.0.0",
+    "morgan": "~1.9.1",
+    "sequelize": "^6.18.0",
+    "sequelize-cli": "^6.4.1"
   },
   "devDependencies": {
     "eslint": "^7.32.0",
