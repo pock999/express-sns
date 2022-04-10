@@ -100,7 +100,7 @@ module.exports = {
       }
 
       // 找出文章(包含 評論以及標籤)
-      const post = await dbModels.Post.findOne({
+      let post = await dbModels.Post.findOne({
         where: {
           id,
         },
@@ -134,6 +134,17 @@ module.exports = {
             'dislikeCount',
             'commentCount',
           ]),
+          Comments: post.Critics.map((item) => ({
+            ..._.pick(item.PostComment, [
+              'id',
+              'comment',
+              'createdAt',
+              'updatedAt',
+              'PostCommentId',
+            ]),
+            name: item.name,
+            email: item.email,
+          })),
           isAuhor: user ? user.id === post.UserId : false,
         },
       });
