@@ -1,55 +1,29 @@
-const jwt = require('jsonwebtoken');
-const { TokenExpiredError } = jwt;
-
 const dbModels = require('../models');
 
+// 判斷是否為使用者
 module.exports = async (req, res, next) => {
   console.log('==== isUser ====');
   try {
-    let token = req.headers.Authorization || req.headers.authorization;
-    if (token && typeof token !== 'undefined') {
-      if (token.includes('Bearer')) {
-        token = token.replace('Bearer ', '');
-      }
+    let { user } = req;
 
-      const decodeToken = jwt.verify(token, config.jwt.secret);
+    user = await dbModels.User.findOne({
+      where: {
+        id: user.id,
+      },
+    });
 
-      console.log('decodeToken => ', decodeToken);
-
-      const user = await dbModels.User.findOne({
-        where: {
-          id: decodeToken.id,
-        },
-      });
-
-      if (!user) {
-        throw {
-          error: 'user not found',
-        };
-      }
-
-      req.user = JsonReParse(user);
-
-      console.log('isUser');
-
-      next();
-    } else {
+    if (!user) {
       throw {
-        error: 'user not login',
+        error: 'user not found',
       };
     }
-  } catch (e) {
-    console.log('e => ', e);
-    if (e instanceof TokenExpiredError) {
-      return res.status(401).json({
-        message: 'Unauthorized',
-        statusCode: 401,
-        data: 'token expired',
-      });
-    }
 
+    req.user = JsonReParse(user);
+
+    next();
+  } catch (e) {
     return res.status(401).json({
-      message: 'Unauthorized',
+      message: 'user not login',
       statusCode: 401,
       data: e,
     });
