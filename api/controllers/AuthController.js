@@ -1,8 +1,5 @@
 const Joi = require('joi');
 const jwt = require('jsonwebtoken');
-const _ = require('lodash');
-
-const config = require('../../config/config');
 
 const dbModels = require('../models');
 
@@ -43,7 +40,7 @@ module.exports = {
       }
 
       user = {
-        ..._.pick(JSON.parse(JSON.stringify(user)), ['id', 'email', 'name']),
+        ..._.pick(JsonReParse(user), ['id', 'email', 'name']),
       };
 
       const token = jwt.sign(user, config.jwt.secret, {

@@ -13,6 +13,17 @@ const bootstrap_data = require('./bootstrap_data');
 
 const app = express();
 
+// global
+const dayjs = require('dayjs');
+const _ = require('lodash');
+
+global.dayjs = dayjs;
+global._ = _;
+global.JsonReParse = (obj) => JSON.parse(JSON.stringify(obj));
+global.JsonSerialize = (obj) => JSON.stringify(obj);
+global.JsonParse = (obj) => JSON.stringify(obj);
+global.config = config;
+
 dbModels.sequelize
   .sync(config.database.sync)
   .then(async () => {

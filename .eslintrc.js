@@ -8,6 +8,14 @@ module.exports = {
   parserOptions: {
     ecmaVersion: 12,
   },
+  globals: {
+    dayjs: true,
+    _: true,
+    config: true,
+    JsonReParse: true,
+    JsonSerialize: true,
+    JsonParse: true,
+  },
   rules: {
     indent: ['error', 2],
     'no-unused-vars': 0,

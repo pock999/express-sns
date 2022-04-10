@@ -1,7 +1,6 @@
 const jwt = require('jsonwebtoken');
 const { TokenExpiredError } = jwt;
 
-const config = require('../../config/config');
 const dbModels = require('../models');
 
 module.exports = async (req, res, next) => {
@@ -29,7 +28,7 @@ module.exports = async (req, res, next) => {
         };
       }
 
-      req.user = JSON.parse(JSON.stringify(user));
+      req.user = JsonReParse(user);
 
       console.log('isUser');
 

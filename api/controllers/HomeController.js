@@ -1,5 +1,3 @@
-const dayjs = require('dayjs');
-
 module.exports = {
   async GetStatus(req, res, next) {
     return res.status(200).json({

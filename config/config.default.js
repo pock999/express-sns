@@ -20,6 +20,6 @@ module.exports = {
 
   jwt: {
     secret: 'secret',
-    expiresIn: 15 * 60 * 1000, // 15分
+    expiresIn: '15m', // 15分
   },
 };
