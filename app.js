@@ -18,7 +18,9 @@ dbModels.sequelize
   .then(async () => {
     console.log('=== sequelize.sync start ===');
 
-    await bootstrap_data();
+    if (config.bootstrapData === true) {
+      await bootstrap_data();
+    }
 
     console.log('=== sequelize.sync end ===');
   })

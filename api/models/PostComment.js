@@ -9,7 +9,12 @@ module.exports = (sequelize, DataTypes) => {
       isLike: {
         type: DataTypes.BOOLEAN,
         allowNull: true,
-        defaultValue: null,
+        defaultValue: false,
+      },
+      isDislike: {
+        type: DataTypes.BOOLEAN,
+        allowNull: true,
+        defaultValue: false,
       },
     },
     {

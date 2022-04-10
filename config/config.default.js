@@ -1,6 +1,8 @@
 module.exports = {
   port: 3000,
 
+  bootstrapData: false,
+
   database: {
     host: 'localhost',
     dialect: 'mariadb',
@@ -13,6 +15,7 @@ module.exports = {
     sync: {
       force: true,
     },
+    logging: false,
   },
 
   jwt: {
