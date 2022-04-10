@@ -11,11 +11,13 @@ module.exports = {
     password: '',
     dialectOptions: {
       charset: 'utf8mb4',
+      useUTC: false, //for reading from database
     },
     sync: {
       force: true,
     },
     logging: false,
+    timezone: '+08:00', //for writing to database
   },
 
   jwt: {
