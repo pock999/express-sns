@@ -28,6 +28,10 @@ module.exports = {
             as: 'Critics',
           },
           {
+            model: dbModels.User,
+            as: 'LikeUser',
+          },
+          {
             model: dbModels.Tag,
             attributes: ['code', 'name'],
           },
@@ -44,6 +48,8 @@ module.exports = {
                 'content',
                 'createdAt',
                 'updatedAt',
+                'likeCount',
+                'dislikeCount',
                 'commentCount',
               ]),
               Tags: p.Tags.map((t) => ({
@@ -104,6 +110,10 @@ module.exports = {
             as: 'Critics',
           },
           {
+            model: dbModels.User,
+            as: 'LikeUser',
+          },
+          {
             model: dbModels.Tag,
             attributes: ['code', 'name'],
           },
@@ -120,6 +130,8 @@ module.exports = {
             'content',
             'createdAt',
             'updatedAt',
+            'likeCount',
+            'dislikeCount',
             'commentCount',
           ]),
           isAuhor: user ? user.id === post.UserId : false,
@@ -209,6 +221,8 @@ module.exports = {
                 'content',
                 'createdAt',
                 'updatedAt',
+                'likeCount',
+                'dislikeCount',
                 'commentCount',
               ]),
               isAuhor: user ? user.id === post.UserId : false,
@@ -310,6 +324,8 @@ module.exports = {
                 'content',
                 'createdAt',
                 'updatedAt',
+                'likeCount',
+                'dislikeCount',
                 'commentCount',
               ]),
               isAuhor: user ? user.id === post.UserId : false,
@@ -329,6 +345,88 @@ module.exports = {
         return res.status(403).json({
           message: 'error',
           statusCode: 403,
+          data: e,
+        });
+      }
+      return res.status(500).json({
+        message: 'error',
+        statusCode: 500,
+        data: e,
+      });
+    }
+  },
+
+  async PostLike(req, res) {
+    try {
+      const { error, value } = Joi.object({
+        id: Joi.number().integer().required(),
+        isLike: Joi.number().integer().required(),
+      }).validate({
+        ...req.body,
+        ...req.params,
+      });
+
+      if (error) {
+        throw {
+          error: error.message,
+        };
+      }
+
+      const { user } = req;
+      const { id, isLike } = value;
+
+      let post = await dbModels.Post.findByPk(id);
+
+      if (!post) {
+        throw {
+          error: 'target not found',
+        };
+      }
+
+      const tx = await dbModels.sequelize.transaction();
+      try {
+        const [postLike, created] = await dbModels.PostLike.findOrCreate({
+          where: {
+            UserId: user.id,
+            PostId: post.id,
+          },
+          transaction: tx,
+        });
+
+        postLike.isLike = isLike;
+        await postLike.save({ transaction: tx });
+
+        await tx.commit();
+      } catch (err) {
+        await tx.rollback();
+        throw err;
+      }
+
+      return res.status(200).json({
+        message: 'success',
+        statusCode: 200,
+        data: post
+          ? {
+              ..._.pick(post, [
+                'id',
+                'title',
+                'content',
+                'createdAt',
+                'updatedAt',
+                'likeCount',
+                'dislikeCount',
+                'commentCount',
+              ]),
+              isAuhor: user ? user.id === post.UserId : false,
+            }
+          : null,
+      });
+    } catch (e) {
+      console.log('e => ', e);
+      if (e.error === 'target not found') {
+        return res.status(400).json({
+          message: 'error',
+          statusCode: 400,
           data: e,
         });
       }

@@ -100,4 +100,11 @@ module.exports = async () => {
     UserId: user1.id,
     comment: '這很好用嗎？',
   });
+
+  // PostLike
+  await dbModels.PostLike.create({
+    PostId: post1_1.id,
+    UserId: user1.id,
+    isLike: 1,
+  });
 };

@@ -36,6 +36,47 @@ module.exports = (sequelize, DataTypes) => {
           throw new Error('Do not try to set the `commentCount` value!');
         },
       },
+      // 讚數
+      likeCount: {
+        type: DataTypes.VIRTUAL,
+        get() {
+          let sum = 0;
+          if (!this.LikeUser) {
+            return null;
+          }
+          for (const likeUser of this.LikeUser) {
+            if (likeUser.PostLike.isLike === 1) {
+              sum += 1;
+            }
+          }
+
+          return sum;
+        },
+        set(value) {
+          throw new Error('Do not try to set the `likeCount` value!');
+        },
+      },
+      // 倒讚數
+      dislikeCount: {
+        type: DataTypes.VIRTUAL,
+        get() {
+          let sum = 0;
+          // console.log('this.LikeUsers => ', this.LikeUsers);
+          if (!this.LikeUser) {
+            return null;
+          }
+          for (const likeUser of this.LikeUser) {
+            if (likeUser.PostLike.isLike === -1) {
+              sum += 1;
+            }
+          }
+
+          return sum;
+        },
+        set(value) {
+          throw new Error('Do not try to set the `dislikeCount` value!');
+        },
+      },
     },
     {
       // options
@@ -57,7 +98,7 @@ module.exports = (sequelize, DataTypes) => {
       through: models.PostTag,
     });
 
-    // 1文章可能會有多個使用者按讚、評論, 1使用者可能會對多文章按讚、評論
+    // 1文章可能會有多個使用者評論, 1使用者可能會對多文章評論
     Post.belongsToMany(models.User, {
       through: models.PostComment,
       // 評論者
@@ -67,6 +108,18 @@ module.exports = (sequelize, DataTypes) => {
       through: models.PostComment,
       // 評論標的
       as: 'Target',
+    });
+
+    // 1文章可能會有多個使用者按讚, 1使用者可能會對多文章按讚
+    Post.belongsToMany(models.User, {
+      through: models.PostLike,
+      // 按讚者
+      as: 'LikeUser',
+    });
+    models.User.belongsToMany(Post, {
+      through: models.PostLike,
+      // 按讚文
+      as: 'LikePost',
     });
   };
 
