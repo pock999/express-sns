@@ -24,8 +24,7 @@ module.exports = {
       const posts = await dbModels.Post.findAll({
         include: [
           {
-            model: dbModels.User,
-            as: 'Critics',
+            model: dbModels.PostComment,
           },
           {
             model: dbModels.User,
@@ -50,8 +49,8 @@ module.exports = {
                 'updatedAt',
                 'likeCount',
                 'dislikeCount',
-                'commentCount',
               ]),
+              commentCount: p.PostComments.length,
               Tags: p.Tags.map((t) => ({
                 ..._.pick(t, ['code', 'name']),
               })),
@@ -106,8 +105,8 @@ module.exports = {
         },
         include: [
           {
-            model: dbModels.User,
-            as: 'Critics',
+            model: dbModels.PostComment,
+            include: [{ model: dbModels.User }],
           },
           {
             model: dbModels.User,
@@ -132,18 +131,18 @@ module.exports = {
             'updatedAt',
             'likeCount',
             'dislikeCount',
-            'commentCount',
           ]),
-          Comments: post.Critics.map((item) => ({
-            ..._.pick(item.PostComment, [
+          commentCount: post.PostComments.length,
+          PostComments: post.PostComments.map((postComment) => ({
+            ..._.pick(postComment, [
               'id',
               'comment',
               'createdAt',
               'updatedAt',
               'PostCommentId',
             ]),
-            name: item.name,
-            email: item.email,
+            name: postComment.User.name,
+            email: postComment.User.email,
           })),
           isAuhor: user ? user.id === post.UserId : false,
         },
@@ -234,8 +233,8 @@ module.exports = {
                 'updatedAt',
                 'likeCount',
                 'dislikeCount',
-                'commentCount',
               ]),
+              commentCount: post.PostComments.length,
               isAuhor: user ? user.id === post.UserId : false,
             }
           : null,
@@ -337,8 +336,8 @@ module.exports = {
                 'updatedAt',
                 'likeCount',
                 'dislikeCount',
-                'commentCount',
               ]),
+              commentCount: post.PostComments.length,
               isAuhor: user ? user.id === post.UserId : false,
             }
           : null,
@@ -426,8 +425,8 @@ module.exports = {
                 'updatedAt',
                 'likeCount',
                 'dislikeCount',
-                'commentCount',
               ]),
+              commentCount: post.PostComments.length,
               isAuhor: user ? user.id === post.UserId : false,
             }
           : null,
