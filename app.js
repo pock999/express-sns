@@ -1,7 +1,7 @@
 const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
-const DB = require('./api/models');
+const dbModels = require('./api/models');
 const logger = require('morgan');
 
 const config = require('./config/config');
@@ -9,11 +9,11 @@ const indexRouter = require('./api/routes/index');
 
 const app = express();
 
-DB.sequelize
+dbModels.sequelize
   .sync(config.database.sync)
   .then(async () => {
     console.log('=== sequelize.sync start ===');
-    const user1 = await DB.User.create({
+    const user1 = await dbModels.User.create({
       name: '王小明',
       email: 'ming123@google.com',
       password: 'abcd1234',

@@ -1,5 +1,6 @@
 const bcrypt = require('bcrypt');
 
+// 使用者
 module.exports = (sequelize, DataTypes) => {
   const User = sequelize.define(
     'User',
@@ -37,7 +38,22 @@ module.exports = (sequelize, DataTypes) => {
       },
     }
   );
-  User.associate = function (models) {};
+
+  User.associate = function (models) {
+    // 使用者之間關聯
+    User.belongsToMany(models.User, {
+      through: models.Relationship,
+      as: 'Fan',
+      foreignKey: 'FanId',
+      otherKey: 'FollowId',
+    });
+    User.belongsToMany(models.User, {
+      through: models.Relationship,
+      as: 'Follow',
+      foreignKey: 'FollowId',
+      otherKey: 'FanId',
+    });
+  };
 
   // classMethods
   User.test = function () {
