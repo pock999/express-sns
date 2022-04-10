@@ -9,17 +9,16 @@ const dbModels = require('./api/models');
 const config = require('./config/config');
 const Routes = require('./api/routes/index');
 
+const bootstrap_data = require('./bootstrap_data');
+
 const app = express();
 
 dbModels.sequelize
   .sync(config.database.sync)
   .then(async () => {
     console.log('=== sequelize.sync start ===');
-    const user1 = await dbModels.User.create({
-      name: '王小明',
-      email: 'ming123@google.com',
-      password: 'abcd1234',
-    });
+
+    await bootstrap_data();
 
     console.log('=== sequelize.sync end ===');
   })
