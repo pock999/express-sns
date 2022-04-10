@@ -1,8 +1,10 @@
 const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
-const dbModels = require('./api/models');
+const cors = require('cors');
 const logger = require('morgan');
+
+const dbModels = require('./api/models');
 
 const config = require('./config/config');
 const indexRouter = require('./api/routes/index');
@@ -25,11 +27,19 @@ dbModels.sequelize
     console.log('error => ', err);
   });
 
+const corsOptions = {
+  origin: '*',
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+  preflightContinue: false,
+  optionsSuccessStatus: 204,
+};
+
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
+app.use(cors(corsOptions));
 app.use('/', indexRouter);
 
 module.exports = app;
