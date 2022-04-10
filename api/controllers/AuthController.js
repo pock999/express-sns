@@ -4,6 +4,50 @@ const jwt = require('jsonwebtoken');
 const dbModels = require('../models');
 
 module.exports = {
+  async Register(req, res) {
+    try {
+      const { error, value } = Joi.object({
+        name: Joi.string().required(),
+        email: Joi.string().required(),
+        password: Joi.string().required(),
+      }).validate(req.body);
+
+      if (error) {
+        throw {
+          error: error.message,
+        };
+      }
+
+      let user = await dbModels.User.findOne({
+        where: {
+          email: value.email,
+        },
+      });
+
+      if (user) {
+        throw {
+          error: 'email is already in use',
+        };
+      }
+
+      user = await dbModels.User.create({
+        ...value,
+      });
+
+      return res.status(200).json({
+        message: 'success',
+        statusCode: 200,
+        data: {},
+      });
+    } catch (e) {
+      return res.status(500).json({
+        message: 'error',
+        statusCode: 500,
+        data: e,
+      });
+    }
+  },
+
   async Login(req, res) {
     try {
       const { error, value } = Joi.object({

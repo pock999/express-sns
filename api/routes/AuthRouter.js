@@ -5,6 +5,7 @@ const AuthController = require('../controllers/AuthController');
 
 const isUser = require('../middlewares/isUser');
 
+router.post('/register', AuthController.Register);
 router.post('/login', AuthController.Login);
 router.get('/profile', isUser, AuthController.Profile);
 
