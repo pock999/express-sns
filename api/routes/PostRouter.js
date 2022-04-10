@@ -20,4 +20,11 @@ router.post(
   PostCommentController.Create
 );
 
+router.put(
+  '/:PostId/comment/:id',
+  jwtDecode,
+  isUser,
+  PostCommentController.Update
+);
+
 module.exports = router;
