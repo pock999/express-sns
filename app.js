@@ -7,7 +7,7 @@ const logger = require('morgan');
 const dbModels = require('./api/models');
 
 const config = require('./config/config');
-const indexRouter = require('./api/routes/index');
+const Routes = require('./api/routes/index');
 
 const app = express();
 
@@ -40,6 +40,6 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
 app.use(cors(corsOptions));
-app.use('/', indexRouter);
+app.use('/', Routes);
 
 module.exports = app;

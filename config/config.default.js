@@ -14,4 +14,9 @@ module.exports = {
       force: true,
     },
   },
+
+  jwt: {
+    secret: 'secret',
+    expiresIn: 15 * 60 * 1000, // 15分
+  },
 };
