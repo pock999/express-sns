@@ -5,6 +5,23 @@ const dbModels = require('../models');
 
 module.exports = {
   async Register(req, res) {
+    /* #swagger.parameters['obj'] = { 
+          in: 'body', 
+          '@schema': { 
+              "required": ["name", "email", "password"], 
+              "properties": { 
+                  "name": { 
+                      "example": "大帥哥" 
+                  },
+                  "email": { 
+                      "example": "test001@test.com" 
+                  },
+                  "password": { 
+                      "example": "test001" 
+                  },
+              } 
+          } 
+      } */
     try {
       const { error, value } = Joi.object({
         name: Joi.string().required(),

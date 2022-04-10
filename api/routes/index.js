@@ -6,7 +6,12 @@ const HomeController = require('../controllers/HomeController');
 const AuthRouter = require('./AuthRouter');
 const PostRouter = require('./PostRouter');
 
-/* GET home page. */
+/**
+ * @swagger
+ * /:
+ *   get:
+ *     description: 確認api端正常運作
+ */
 router.get('/', HomeController.GetStatus);
 
 router.use('/auth', AuthRouter);

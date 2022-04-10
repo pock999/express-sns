@@ -13,6 +13,10 @@ const bootstrap_data = require('./bootstrap_data');
 
 const app = express();
 
+// swagger
+const swaggerUi = require('swagger-ui-express');
+const swaggerFile = require('./swagger_output.json'); // 剛剛輸出的 JSON
+
 // global
 const dayjs = require('dayjs');
 const _ = require('lodash');
@@ -52,6 +56,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
 app.use(cors(corsOptions));
+app.use('/api-doc', swaggerUi.serve, swaggerUi.setup(swaggerFile));
 app.use('/', Routes);
 
 module.exports = app;
