@@ -69,15 +69,13 @@ module.exports = {
 
   async Profile(req, res) {
     try {
-      const { user } = req.body;
-
-      console.log(user);
+      const { user } = req;
 
       return res.status(200).json({
         message: 'success',
         statusCode: 200,
         data: {
-          user,
+          ..._.pick(user, ['id', 'email', 'name']),
         },
       });
     } catch (e) {
