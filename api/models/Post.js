@@ -91,9 +91,7 @@ module.exports = (sequelize, DataTypes) => {
   Post.associate = function (models) {
     // 1使用者會有多個文章
     models.User.hasMany(Post);
-    Post.belongsTo(models.User, {
-      as: 'Writer',
-    });
+    Post.belongsTo(models.User);
 
     // 文章可能有多個tag, tag同時也存在於多個文章
     Post.belongsToMany(models.Tag, {

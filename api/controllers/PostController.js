@@ -117,6 +117,7 @@ module.exports = {
         statusCode: 200,
         data: {
           ..._.pick(post, [
+            'id',
             'title',
             'content',
             'createdAt',
@@ -207,6 +208,7 @@ module.exports = {
         data: post
           ? {
               ..._.pick(post, [
+                'id',
                 'title',
                 'content',
                 'createdAt',
@@ -221,6 +223,123 @@ module.exports = {
       });
     } catch (e) {
       console.log('e => ', e);
+      return res.status(500).json({
+        message: 'error',
+        statusCode: 500,
+        data: e,
+      });
+    }
+  },
+
+  async Update(req, res) {
+    try {
+      const { error, value } = Joi.object({
+        id: Joi.number().integer().required(),
+        title: Joi.string().required(),
+        content: Joi.string(),
+        Tags: Joi.array().items(Joi.number().integer()),
+      }).validate({
+        ...req.body,
+        ...req.params,
+      });
+
+      if (error) {
+        throw {
+          error: error.message,
+        };
+      }
+
+      const { user } = req;
+      const { id, title, content, Tags } = value;
+
+      const tags = await dbModels.Tag.findAll({
+        where: {
+          id: _.isArray(Tags) ? Tags : [],
+        },
+      });
+
+      let post = await dbModels.Post.findByPk(id);
+
+      if (!post) {
+        throw {
+          error: 'target not found',
+        };
+      }
+
+      if (post.UserId !== user.id) {
+        throw {
+          error: 'not allow',
+        };
+      }
+
+      const tx = await dbModels.sequelize.transaction();
+
+      try {
+        // 刪除舊有tag
+        await dbModels.PostTag.destroy({
+          where: {
+            PostId: post.id,
+          },
+          transaction: tx,
+        });
+
+        for (const tag of tags) {
+          await dbModels.PostTag.create(
+            {
+              PostId: post.id,
+              TagId: tag.id,
+            },
+            {
+              transaction: tx,
+            }
+          );
+        }
+
+        post.title = title;
+        post.content = content;
+        await post.save({ transaction: tx });
+
+        await tx.commit();
+      } catch (err) {
+        await tx.rollback();
+        throw err;
+      }
+
+      return res.status(200).json({
+        message: 'success',
+        statusCode: 200,
+        data: post
+          ? {
+              ..._.pick(post, [
+                'id',
+                'title',
+                'content',
+                'createdAt',
+                'updatedAt',
+                'likeCount',
+                'dilikeCount',
+                'commentCount',
+              ]),
+              isAuhor: user ? user.id === post.UserId : false,
+            }
+          : null,
+      });
+    } catch (e) {
+      console.log('e => ', e);
+      if (e.error === 'target not found') {
+        return res.status(400).json({
+          message: 'error',
+          statusCode: 400,
+          data: e,
+        });
+      }
+      if (e.error === 'not allow') {
+        return res.status(403).json({
+          message: 'error',
+          statusCode: 403,
+          data: e,
+        });
+      }
       return res.status(500).json({
         message: 'error',
         statusCode: 500,

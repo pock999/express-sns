@@ -5,7 +5,7 @@ module.exports = (sequelize, DataTypes) => {
     {},
     {
       // options
-      paranoid: true,
+      paranoid: false,
 
       hooks: {},
     }
