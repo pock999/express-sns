@@ -36,50 +36,6 @@ module.exports = (sequelize, DataTypes) => {
           throw new Error('Do not try to set the `commentCount` value!');
         },
       },
-
-      // 讚數
-      likeCount: {
-        type: DataTypes.VIRTUAL,
-        get() {
-          let sum = 0;
-          // console.log('this.Critics => ', this.Critics);
-          if (!this.Critics) {
-            return null;
-          }
-          for (const critic of this.Critics) {
-            if (critic.PostComment.isLike) {
-              sum += 1;
-            }
-          }
-
-          return sum;
-        },
-        set(value) {
-          throw new Error('Do not try to set the `likeCount` value!');
-        },
-      },
-
-      // 倒讚數
-      dilikeCount: {
-        type: DataTypes.VIRTUAL,
-        get() {
-          let sum = 0;
-          // console.log('this.Critics => ', this.Critics);
-          if (!this.Critics) {
-            return null;
-          }
-          for (const critic of this.Critics) {
-            if (critic.PostComment.isDislike) {
-              sum += 1;
-            }
-          }
-
-          return sum;
-        },
-        set(value) {
-          throw new Error('Do not try to set the `dilikeCount` value!');
-        },
-      },
     },
     {
       // options

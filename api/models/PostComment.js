@@ -1,20 +1,11 @@
-// 文章(回覆、按讚、評論)
+// 文章(回覆、評論)
 module.exports = (sequelize, DataTypes) => {
   const PostComment = sequelize.define(
     'PostComment',
     {
       comment: {
         type: DataTypes.STRING(9999),
-      },
-      isLike: {
-        type: DataTypes.BOOLEAN,
-        allowNull: true,
-        defaultValue: false,
-      },
-      isDislike: {
-        type: DataTypes.BOOLEAN,
-        allowNull: true,
-        defaultValue: false,
+        allowNull: false,
       },
     },
     {

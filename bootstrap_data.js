@@ -79,22 +79,20 @@ module.exports = async () => {
   const postComment1_1_1 = await dbModels.PostComment.create({
     PostId: post1_1.id,
     UserId: user2.id,
-    isLike: true,
     comment: '哈哈哈 真有趣',
   });
 
   const postComment1_1_2 = await dbModels.PostComment.create({
     PostId: post1_1.id,
     UserId: user1.id,
-    isLike: true,
     comment: '對啊 我也這麼覺得',
     PostCommentId: postComment1_1_1.id,
   });
 
   const postComment1_2_1 = await dbModels.PostComment.create({
     PostId: post1_2.id,
+    comment: '讚',
     UserId: user2.id,
-    isLike: true,
   });
 
   const postComment2_1_1 = await dbModels.PostComment.create({
