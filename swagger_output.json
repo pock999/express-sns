@@ -29,6 +29,7 @@
           {
             "name": "obj",
             "in": "body",
+            "description": "註冊",
             "schema": {
               "required": [
                 "name",
@@ -62,7 +63,27 @@
     "/auth/login": {
       "post": {
         "description": "",
-        "parameters": [],
+        "parameters": [
+          {
+            "name": "obj",
+            "in": "body",
+            "description": "登入",
+            "schema": {
+              "required": [
+                "email",
+                "password"
+              ],
+              "properties": {
+                "email": {
+                  "example": "ming123@google.com"
+                },
+                "password": {
+                  "example": "abcd1234"
+                }
+              }
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "OK"
@@ -194,6 +215,53 @@
           },
           "403": {
             "description": "Forbidden"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/post/": {
+      "post": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "description": "新增貼文",
+            "schema": {
+              "required": [
+                "title",
+                "content"
+              ],
+              "properties": {
+                "title": {
+                  "example": "新文章標題"
+                },
+                "content": {
+                  "example": "新文章內容"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
           },
           "500": {
             "description": "Internal Server Error"

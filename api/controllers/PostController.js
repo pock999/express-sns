@@ -165,6 +165,21 @@ module.exports = {
   },
 
   async Create(req, res) {
+    /* #swagger.parameters['obj'] = { 
+          in: 'body', 
+          description: '新增貼文',
+          '@schema': { 
+              "required": ["title", "content"], 
+              "properties": { 
+                  "title": { 
+                      "example": "新文章標題" 
+                  },
+                  "content": { 
+                      "example": "新文章內容" 
+                  },
+              } 
+          } 
+      } */
     try {
       const { error, value } = Joi.object({
         title: Joi.string().required(),

@@ -7,6 +7,7 @@ module.exports = {
   async Register(req, res) {
     /* #swagger.parameters['obj'] = { 
           in: 'body', 
+          description: '註冊',
           '@schema': { 
               "required": ["name", "email", "password"], 
               "properties": { 
@@ -66,6 +67,21 @@ module.exports = {
   },
 
   async Login(req, res) {
+    /* #swagger.parameters['obj'] = { 
+          in: 'body', 
+          description: '登入',
+          '@schema': { 
+              "required": ["email", "password"], 
+              "properties": { 
+                  "email": { 
+                      "example": "ming123@google.com" 
+                  },
+                  "password": { 
+                      "example": "abcd1234" 
+                  },
+              } 
+          } 
+      } */
     try {
       const { error, value } = Joi.object({
         email: Joi.string().required(),
