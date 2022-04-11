@@ -1,3 +1,5 @@
+# Sequelize 初始化流程
+
 - 執行以下命令以完成 Sequelize 初始化
 
 ```
