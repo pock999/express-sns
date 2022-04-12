@@ -107,6 +107,15 @@
             "name": "authorization",
             "in": "header",
             "type": "string"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "description": "獲取個人資料，請先登入獲取token貼到Authorization裡面再傳",
+            "schema": {
+              "type": "object",
+              "properties": {}
+            }
           }
         ],
         "responses": {
@@ -124,7 +133,7 @@
     },
     "/post/list": {
       "get": {
-        "description": "",
+        "description": "取得貼文列表(會判斷是否貼文作者為帶token的人，也可不帶token)",
         "parameters": [
           {
             "name": "Authorization",
@@ -158,7 +167,8 @@
             "name": "id",
             "in": "path",
             "required": true,
-            "type": "string"
+            "type": "number",
+            "description": "取得單一貼文(會判斷是否貼文作者為帶token的人，也可不帶token)，id為貼文id"
           },
           {
             "name": "Authorization",
@@ -201,6 +211,25 @@
             "name": "authorization",
             "in": "header",
             "type": "string"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "description": "編輯貼文(需要帶貼文id)",
+            "schema": {
+              "required": [
+                "title",
+                "content"
+              ],
+              "properties": {
+                "title": {
+                  "example": "更新文章標題"
+                },
+                "content": {
+                  "example": "更新文章內容"
+                }
+              }
+            }
           }
         ],
         "responses": {

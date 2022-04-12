@@ -142,6 +142,10 @@ module.exports = {
   },
 
   async Profile(req, res) {
+    /* #swagger.parameters['obj'] = { 
+        in: 'body', 
+        description: '獲取個人資料，請先登入獲取token貼到Authorization裡面再傳',
+    } */
     try {
       const { user } = req;
 

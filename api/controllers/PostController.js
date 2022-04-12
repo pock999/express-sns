@@ -4,6 +4,7 @@ const dbModels = require('../models');
 
 module.exports = {
   async List(req, res) {
+    // #swagger.description = '取得貼文列表(會判斷是否貼文作者為帶token的人，也可不帶token)'
     try {
       let { user } = req;
 
@@ -69,6 +70,12 @@ module.exports = {
   },
 
   async Detail(req, res) {
+    /*  #swagger.parameters['id'] = {
+      in: 'path',
+      description: '取得單一貼文(會判斷是否貼文作者為帶token的人，也可不帶token)，id為貼文id',
+      required: true,
+      type: 'number',
+    } */
     try {
       const { error, value } = Joi.object({
         id: Joi.number().integer().required(),
@@ -249,7 +256,9 @@ module.exports = {
                 'likeCount',
                 'dislikeCount',
               ]),
-              commentCount: post.PostComments.length,
+              commentCount: _.isArray(post.PostComments)
+                ? post.PostComments.length
+                : null,
               isAuhor: user ? user.id === post.UserId : false,
             }
           : null,
@@ -265,6 +274,21 @@ module.exports = {
   },
 
   async Update(req, res) {
+    /* #swagger.parameters['obj'] = { 
+          in: 'body', 
+          description: '編輯貼文(需要帶貼文id)',
+          '@schema': { 
+              "required": ["title", "content"], 
+              "properties": { 
+                  "title": { 
+                      "example": "更新文章標題" 
+                  },
+                  "content": { 
+                      "example": "更新文章內容" 
+                  },
+              } 
+          } 
+      } */
     try {
       const { error, value } = Joi.object({
         id: Joi.number().integer().required(),
@@ -352,7 +376,9 @@ module.exports = {
                 'likeCount',
                 'dislikeCount',
               ]),
-              commentCount: post.PostComments.length,
+              commentCount: _.isArray(post.PostComments)
+                ? post.PostComments.length
+                : null,
               isAuhor: user ? user.id === post.UserId : false,
             }
           : null,
