@@ -215,7 +215,7 @@
           {
             "name": "obj",
             "in": "body",
-            "description": "編輯貼文(需要帶貼文id)",
+            "description": "編輯貼文(需要帶token, 需要帶貼文id)",
             "schema": {
               "required": [
                 "title",
@@ -268,7 +268,7 @@
           {
             "name": "obj",
             "in": "body",
-            "description": "新增貼文",
+            "description": "新增貼文(要帶token)",
             "schema": {
               "required": [
                 "title",
@@ -317,6 +317,21 @@
             "name": "authorization",
             "in": "header",
             "type": "string"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "description": "按讚、倒讚貼文(要帶token)",
+            "schema": {
+              "required": [
+                "isLike"
+              ],
+              "properties": {
+                "isLike": {
+                  "example": 1
+                }
+              }
+            }
           }
         ],
         "responses": {
@@ -354,6 +369,21 @@
             "name": "authorization",
             "in": "header",
             "type": "string"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "description": "新增貼文評論(要帶token)",
+            "schema": {
+              "required": [
+                "comment"
+              ],
+              "properties": {
+                "comment": {
+                  "example": "新增評論"
+                }
+              }
+            }
           }
         ],
         "responses": {
@@ -400,6 +430,21 @@
             "name": "authorization",
             "in": "header",
             "type": "string"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "description": "更新貼文評論(要帶token)",
+            "schema": {
+              "required": [
+                "comment"
+              ],
+              "properties": {
+                "comment": {
+                  "example": "更新評論"
+                }
+              }
+            }
           }
         ],
         "responses": {

@@ -174,7 +174,7 @@ module.exports = {
   async Create(req, res) {
     /* #swagger.parameters['obj'] = { 
           in: 'body', 
-          description: '新增貼文',
+          description: '新增貼文(要帶token)',
           '@schema': { 
               "required": ["title", "content"], 
               "properties": { 
@@ -276,7 +276,7 @@ module.exports = {
   async Update(req, res) {
     /* #swagger.parameters['obj'] = { 
           in: 'body', 
-          description: '編輯貼文(需要帶貼文id)',
+          description: '編輯貼文(需要帶token, 需要帶貼文id)',
           '@schema': { 
               "required": ["title", "content"], 
               "properties": { 
@@ -408,6 +408,18 @@ module.exports = {
   },
 
   async PostLike(req, res) {
+    /* #swagger.parameters['obj'] = { 
+          in: 'body', 
+          description: '按讚、倒讚貼文(要帶token)',
+          '@schema': { 
+              "required": ["isLike"], 
+              "properties": { 
+                  "isLike": { 
+                      "example": 1
+                  },
+              } 
+          } 
+      } */
     try {
       const { error, value } = Joi.object({
         id: Joi.number().integer().required(),
@@ -453,6 +465,15 @@ module.exports = {
         throw err;
       }
 
+      post = await dbModels.Post.findByPk(id, {
+        include: [
+          {
+            model: dbModels.User,
+            as: 'LikeUser',
+          },
+        ],
+      });
+
       return res.status(200).json({
         message: 'success',
         statusCode: 200,
@@ -467,7 +488,9 @@ module.exports = {
                 'likeCount',
                 'dislikeCount',
               ]),
-              commentCount: post.PostComments.length,
+              commentCount: _.isArray(post.PostComments)
+                ? post.PostComments.length
+                : null,
               isAuhor: user ? user.id === post.UserId : false,
             }
           : null,

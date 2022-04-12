@@ -4,6 +4,18 @@ const dbModels = require('../models');
 
 module.exports = {
   async Create(req, res) {
+    /* #swagger.parameters['obj'] = { 
+          in: 'body', 
+          description: '新增貼文評論(要帶token)',
+          '@schema': { 
+              "required": ["comment"], 
+              "properties": { 
+                  "comment": { 
+                      "example": "新增評論" 
+                  },
+              } 
+          } 
+      } */
     try {
       const { error, value } = Joi.object({
         PostId: Joi.number().integer().required(),
@@ -76,6 +88,18 @@ module.exports = {
     }
   },
   async Update(req, res) {
+    /* #swagger.parameters['obj'] = { 
+          in: 'body', 
+          description: '更新貼文評論(要帶token)',
+          '@schema': { 
+              "required": ["comment"], 
+              "properties": { 
+                  "comment": { 
+                      "example": "更新評論" 
+                  },
+              } 
+          } 
+      } */
     try {
       const { error, value } = Joi.object({
         id: Joi.number().integer().required(),
